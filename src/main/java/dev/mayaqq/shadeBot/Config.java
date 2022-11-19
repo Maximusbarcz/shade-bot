@@ -4,29 +4,60 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.util.Map;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 
 public class Config {
     static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    static File conf = new File("conf.json");
+    static CodeSource codeSource = Bot.class.getProtectionDomain().getCodeSource();
+    static File jarFile;
 
-    public static void create() throws IOException {
+    static {
+        try {
+            jarFile = new File(codeSource.getLocation().toURI().getPath());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static String jarDir = jarFile.getParentFile().getPath();
+    static File conf = new File("conf.json");
+    //static File conf = new File(jarDir, "conf.json");
+
+    public static Conf CONFIG = new Conf();
+
+    public Config() throws URISyntaxException {
+    }
+
+    public static void load() {
         if (!conf.exists()) {
-            conf.createNewFile();
-            try (FileWriter writer = new FileWriter(conf)) {
-                gson.toJson(new Conf(), writer);
+            try {
+                conf.createNewFile();
+                saveConfig();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                CONFIG = gson.fromJson(new FileReader(conf), Conf.class);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
-    public static String getToken() throws FileNotFoundException {
-        Map map = gson.fromJson(new FileReader(conf), Map.class);
-        return (map.get("token").toString());
+
+    public static void saveConfig() throws IOException {
+        //Write some info into the file under here
+        FileWriter writer = new FileWriter(conf);
+        writer.write(gson.toJson(CONFIG));
+        writer.close();
     }
 
 
     public static class Conf {
-        static String token = "YOUR BOT TOKEN HERE";
+        String token = "YOUR BOT TOKEN HERE";
+        String prefix = "*";
+
+        public Conf() {}
     }
 }

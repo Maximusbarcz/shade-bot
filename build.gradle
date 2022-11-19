@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group 'dev.mayaqq.shadeBot'
@@ -12,9 +13,11 @@ application {
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
+    implementation 'org.json:json:20220924'
     implementation 'com.google.code.gson:gson:2.10'
     implementation 'net.dv8tion:JDA:5.0.0-alpha.22'
 }
