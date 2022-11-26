@@ -56,7 +56,8 @@ public class Config {
 
     public static class Conf {
         String token = "YOUR BOT TOKEN HERE";
-        String prefix = "*";
+        public String prefix = "*";
+        public String tenorKey = "LIVDSRZULELA";
 
         public Conf() {}
     }
