@@ -3,14 +3,17 @@ package dev.mayaqq.shadeBot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.lang.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 public class Config {
     static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    static CodeSource codeSource = Bot.class.getProtectionDomain().getCodeSource();
+    static CodeSource codeSource = Shade.class.getProtectionDomain().getCodeSource();
     static File jarFile;
+    static boolean isJar = codeSource.getLocation().getPath().endsWith(".jar");
+    static File conf;
 
     static {
         try {
@@ -21,15 +24,13 @@ public class Config {
     }
 
     static String jarDir = jarFile.getParentFile().getPath();
-    static File conf = new File("conf.json");
-    //static File conf = new File(jarDir, "conf.json");
 
     public static Conf CONFIG = new Conf();
 
-    public Config() throws URISyntaxException {
-    }
-
     public static void load() {
+
+        conf = isJar ? new File(jarDir, "conf.json") : new File("conf.json");
+
         if (!conf.exists()) {
             try {
                 conf.createNewFile();

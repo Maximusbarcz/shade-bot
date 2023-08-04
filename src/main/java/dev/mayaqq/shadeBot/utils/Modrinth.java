@@ -110,13 +110,13 @@ public class Modrinth {
             map.put("description", jsonObject.getString("description"));
             map.put("downloads", String.valueOf(jsonObject.getInt("downloads")));
             map.put("slug", jsonObject.getString("slug"));
-            if (jsonObject.getString("icon_url") != null) {
+            try {
                 map.put("icon", jsonObject.getString("icon_url"));
-            } else {
+            } catch (Exception e) {
                 map.put("icon", "null");
             }
             map.put("followers", String.valueOf(jsonObject.getInt("followers")));
-            map.put("license", jsonObject.getJSONObject("license").getString("name"));
+            map.put("license", jsonObject.getJSONObject("license").getString("id"));
             return map;
         } catch (IOException e) {
             e.printStackTrace();

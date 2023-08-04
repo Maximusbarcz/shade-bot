@@ -1,14 +1,14 @@
-package dev.mayaqq.shadeBot.slashCommands;
+package dev.mayaqq.shadeBot.commands.slash;
 
+import dev.mayaqq.shadeBot.utils.BotUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class InfoSlashCommand {
-    public static void info(SlashCommandInteractionEvent event) {
+public class ServerSlashCommand {
+    public static void serverSlashCommand(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(event.getMember().getColor());
+        EmbedBuilder eb = BotUtils.shadeEmbed(event);
         eb.setTitle(guild.getName(), guild.getVanityUrl());
         if (guild.getDescription() != null) {
             eb.addField("Description", guild.getDescription(), false);

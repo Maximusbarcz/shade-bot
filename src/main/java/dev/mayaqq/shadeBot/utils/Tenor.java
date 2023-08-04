@@ -15,20 +15,6 @@ public class Tenor {
     public static String apiKey = Config.CONFIG.tenorKey;
     static OkHttpClient client = new OkHttpClient().newBuilder()
             .build();
-    public static String GIF(String searchTerm) {
-        Request request = new Request.Builder()
-                .url(String.format("https://api.tenor.com/v1/search?q=%1$s&key=%2$s&limit=%3$s", searchTerm, apiKey, 1))
-                .method("GET", null)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            JSONObject jsonObject = new JSONObject(response.body().string());
-            return jsonObject.getJSONArray("results").getJSONObject(0).getJSONArray("media").getJSONObject(0).getJSONObject("gif").getString("url");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public static String randomGIF(String searchTerm, int maxResults) {
         Request request = new Request.Builder()
@@ -45,25 +31,6 @@ public class Tenor {
                 list.add(jsonArray.getJSONObject(i).getJSONArray("media").getJSONObject(0).getJSONObject("gif").getString("url"));
             }
             return list.get(rand.nextInt(list.size()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public static ArrayList<String> GIFs(String searchTerm, int maxResults) {
-        Request request = new Request.Builder()
-                .url(String.format("https://api.tenor.com/v1/search?q=%1$s&key=%2$s&limit=%3$s", searchTerm, apiKey, maxResults))
-                .method("GET", null)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            ArrayList<String> list = new ArrayList<>();
-            JSONObject jsonObject = new JSONObject(response.body().string());
-            JSONArray jsonArray = jsonObject.getJSONArray("results");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                list.add(jsonArray.getJSONObject(i).getJSONArray("media").getJSONObject(0).getJSONObject("gif").getString("url"));
-            }
-            return list;
         } catch (IOException e) {
             e.printStackTrace();
         }
